@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+	<declare-styleable name="FillWidthImageButton">
+		<attr name="standard_drawable" format="reference" />
+		<attr name="clicked_drawable" format="reference" />
+	</declare-styleable>
+</resources>
