@@ -34,6 +34,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Infrastructure\POs\DownloadItemPO.cs" />
+    <Compile Include="Infrastructure\POs\IDownloadable.cs" />
+    <Compile Include="Infrastructure\Services\IDownloader.cs" />
+    <Compile Include="Infrastructure\Services\IDownloadManager.cs" />
+    <Compile Include="Infrastructure\Services\Implementations\DownloadManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\GetAllLinksViewModel.cs" />
     <Compile Include="ViewModels\MainActivityViewModel.cs" />

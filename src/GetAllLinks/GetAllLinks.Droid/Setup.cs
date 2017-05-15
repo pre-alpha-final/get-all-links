@@ -8,6 +8,9 @@ using MvvmCross.Platform.Plugins;
 using MvvmCross.Plugins.DownloadCache.Droid;
 using MvvmCross.Droid.Views;
 using MvvmCross.Droid.Shared.Presenter;
+using MvvmCross.Platform;
+using GetAllLinks.Droid.Services.Implementations;
+using GetAllLinks.Core.Infrastructure.Services;
 
 namespace GetAllLinks.Droid
 {
@@ -20,6 +23,8 @@ namespace GetAllLinks.Droid
 
 		protected override IMvxApplication CreateApp()
 		{
+			Mvx.RegisterType<IDownloader, Downloader>();
+
 			return new App();
 		}
 
