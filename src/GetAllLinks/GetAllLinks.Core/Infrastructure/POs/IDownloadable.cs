@@ -2,6 +2,7 @@
 {
 	public interface IDownloadable
 	{
-		void UpdateProgress(double completion);
+		string Url { get; set; }
+		void UpdateProgress(double completion, int speed);
 	}
 }
