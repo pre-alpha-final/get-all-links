@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GetAllLinks.Core.Infrastructure.POs;
 using MvvmCross.Core.ViewModels;
 using GetAllLinks.Core.Infrastructure.Services;
 
@@ -7,6 +8,17 @@ namespace GetAllLinks.Core.ViewModels
 	public class GetAllLinksViewModel : MvxViewModel
 	{
 		private readonly IDownloadManager _downloadManager;
+
+		private List<DownloadItemPO> _downloadableItems;
+		public List<DownloadItemPO> DownloadableItems
+		{
+			get { return _downloadableItems; }
+			set
+			{
+				_downloadableItems = value;
+				RaisePropertyChanged();
+			}
+		}
 
 		public GetAllLinksViewModel(IDownloadManager downloadManager)
 		{
@@ -17,7 +29,7 @@ namespace GetAllLinks.Core.ViewModels
 		public IMvxCommand SettingsCommand { get; }
 		private async void SettingsAction()
 		{
-			var downloadableItems = await _downloadManager.GetDownloadItems();
+			DownloadableItems = await _downloadManager.GetDownloadItems();
 			await _downloadManager.DownloadAll();
 		}
 	}

@@ -208,6 +208,7 @@
     <None Include="Properties\AndroidManifest.xml" />
     <AndroidResource Include="Resources\layout\getAllLinksView.axml" />
     <AndroidResource Include="Resources\layout\mainView.axml" />
+    <AndroidResource Include="Resources\layout\download_item.axml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\" />

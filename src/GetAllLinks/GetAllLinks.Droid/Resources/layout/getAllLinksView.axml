@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-	android:id="@+id/get_all_links_view"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:local="http://schemas.android.com/apk/res-auto"
 	android:orientation="vertical"
@@ -11,7 +10,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:gravity="right"
-		android:orientation="horizontal">
+		android:orientation="vertical">
 		<FillWidthImageButton
 			android:id="@+id/settings"
 			android:layout_width="140dp"
@@ -22,5 +21,11 @@
 			local:standard_drawable="@drawable/off"
 			local:clicked_drawable="@drawable/on"
 			local:MvxBind="Click SettingsCommand"/>
+		<MvvmCross.Droid.Support.V7.RecyclerView.MvxRecyclerView
+			android:id="@+id/downloads_recycler"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			local:MvxItemTemplate="@layout/download_item"
+			local:MvxBind="ItemsSource DownloadableItems" />
 	</LinearLayout>
 </LinearLayout>
