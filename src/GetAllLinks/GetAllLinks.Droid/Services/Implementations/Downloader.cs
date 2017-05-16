@@ -22,7 +22,17 @@ namespace GetAllLinks.Droid.Services.Implementations
 		{
 			GetPermission(Manifest.Permission.ReadExternalStorage);
 			GetPermission(Manifest.Permission.WriteExternalStorage);
-			var moviesDirectory = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryMovies).AbsolutePath;
+			var moviesDirectory = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDownloads).AbsolutePath;
+			var y = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryMovies).AbsolutePath;
+			var x = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath;
+			var x2 = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDownloads).AbsolutePath;
+			var x3 = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryPictures).AbsolutePath;
+			var activity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
+			var y3 = activity.ApplicationInfo.DataDir;
+			moviesDirectory = "/storage/697B-091B/Android/data/com.sp.getalllinks/files/Movies";
+			var ddd = activity.FilesDir;
+			var z = activity.GetExternalFilesDirs("Movies");
+			var dd = activity.GetExternalMediaDirs();
 
 			var receivedBytes = 0;
 			var client = new WebClient();
