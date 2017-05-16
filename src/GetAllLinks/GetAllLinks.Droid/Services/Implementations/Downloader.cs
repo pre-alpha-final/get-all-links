@@ -1,4 +1,4 @@
-using System.Diagnostics;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using GetAllLinks.Core.Infrastructure.POs;
@@ -9,11 +9,11 @@ namespace GetAllLinks.Droid.Services.Implementations
 	class Downloader : IDownloader
 	{
 		private const int ChunkSize = 4096;
-		private const int NumberOfChunks = 100;
+		private const int MeasureSpan = 1000;
 
 		public async Task Download(IDownloadable downloadable)
 		{
-			int receivedBytes = 0;
+			var receivedBytes = 0;
 			var client = new WebClient();
 
 			using (var stream = await client.OpenReadTaskAsync(downloadable.Url))
@@ -21,10 +21,10 @@ namespace GetAllLinks.Droid.Services.Implementations
 				var buffer = new byte[ChunkSize];
 				var totalBytes = int.Parse(client.ResponseHeaders[HttpResponseHeader.ContentLength]);
 
-				int speed = 0;
-				Stopwatch sw = new Stopwatch();
-				sw.Start();
-				for (int i=1;; i++)
+				var speed = 0;
+				var lastUpdate = DateTime.Now;
+				var lastReceivedBytes = 0;
+				for (;;)
 				{
 					var bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
 					if (bytesRead == 0)
@@ -33,15 +33,16 @@ namespace GetAllLinks.Droid.Services.Implementations
 						break;
 					}
 					receivedBytes += bytesRead;
-
-					if (i % NumberOfChunks == 0)
+					
+					if (DateTime.Now > lastUpdate + TimeSpan.FromMilliseconds(MeasureSpan))
 					{
-						sw.Stop();
-						speed = ChunkSize * NumberOfChunks / sw.Elapsed.Milliseconds; // bytes / milliseconds
-						sw.Start();
+						speed = (receivedBytes - lastReceivedBytes) / MeasureSpan;
+						downloadable.UpdateProgress((double)receivedBytes / totalBytes, speed);
+						lastUpdate = DateTime.Now;
+						lastReceivedBytes = receivedBytes;
 					}
-					downloadable.UpdateProgress((double)receivedBytes / totalBytes, speed);
 				}
+				downloadable.UpdateProgress((double)receivedBytes / totalBytes, speed);
 			}
 		}
 	}

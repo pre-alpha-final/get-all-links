@@ -4,6 +4,17 @@ namespace GetAllLinks.Core.Infrastructure.POs
 {
 	public class DownloadItemPO : MvxNotifyPropertyChanged, IDownloadable
 	{
+		private string _name;
+		public string Name
+		{
+			get { return _name; }
+			set
+			{
+				_name = value;
+				RaisePropertyChanged();
+			}
+		}
+
 		private string _url;
 		public string Url
 		{
@@ -26,8 +37,8 @@ namespace GetAllLinks.Core.Infrastructure.POs
 			}
 		}
 
-		private double _completion;
-		public double Completion
+		private string _completion;
+		public string Completion
 		{
 			get { return _completion; }
 			set
@@ -39,14 +50,12 @@ namespace GetAllLinks.Core.Infrastructure.POs
 
 		public void UpdateProgress(double completion, int speed)
 		{
-			Completion = completion;
+			Completion = $"{100 * completion:0.00} %";
 			var speedKbytesSecond = (double)speed * 1000 / 1024;
 			var speedMbytesSecond = speedKbytesSecond / 1024;
-			DownloadSpeed = $"{speedKbytesSecond:0.##} Kb/s";
+			DownloadSpeed = $"{speedKbytesSecond:0.00} Kb/s";
 			if (speedMbytesSecond > 1)
-				DownloadSpeed = $"{speedMbytesSecond:0.##} Mb/s";
-			if (Completion == 1)
-				DownloadSpeed = "Completed";
+				DownloadSpeed = $"{speedMbytesSecond:0.00} Mb/s";
 		}
 	}
 }
