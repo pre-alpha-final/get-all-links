@@ -43,7 +43,15 @@ namespace GetAllLinks.Core.Infrastructure.Services.Implementations
 						var downloadable = GetNextDownloadable();
 						if (downloadable == null)
 							return;
-						await Mvx.Resolve<IDownloader>().Download(downloadable);
+						try
+						{
+							await Mvx.Resolve<IDownloader>().Download(downloadable);
+						}
+						catch
+						{
+							// ignored
+							downloadable.UpdateProgress(0, 0, "error: download error");
+						}
 					}
 				});
 			}

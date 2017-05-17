@@ -18,7 +18,7 @@ namespace GetAllLinks.Droid.Services.Implementations
 	class Downloader : IDownloader
 	{
 		private const int ChunkSize = 4096;
-		private const int MeasureSpan = 1000;
+		private const int MeasureSpan = 4000;
 
 		public async Task Download(IDownloadable downloadable)
 		{
