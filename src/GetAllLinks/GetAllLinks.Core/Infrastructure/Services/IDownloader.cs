@@ -7,5 +7,6 @@ namespace GetAllLinks.Core.Infrastructure.Services
 	{
 		Task Download(IDownloadable downloadable);
 		Task<string> DownloadList(string url);
+		Task<string> GetDefaultDownloadDir();
 	}
 }

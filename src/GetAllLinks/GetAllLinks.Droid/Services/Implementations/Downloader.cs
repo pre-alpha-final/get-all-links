@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Android;
@@ -10,6 +11,7 @@ using GetAllLinks.Core.Infrastructure.POs;
 using GetAllLinks.Core.Infrastructure.Services;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Droid.Platform;
+using GetAllLinks.Core.Helpers;
 
 namespace GetAllLinks.Droid.Services.Implementations
 {
@@ -24,8 +26,8 @@ namespace GetAllLinks.Droid.Services.Implementations
 			GetPermission(Manifest.Permission.WriteExternalStorage);
 
 			var activity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
-			var mediaDirs = activity.GetExternalMediaDirs();
-			var targetDirectory = "/storage/697B-091B/Android/media/com.getalllinks";
+			activity.GetExternalMediaDirs();
+			var targetDirectory = Settings.DestinationDirectory;
 
 			var receivedBytes = 0;
 			var client = new WebClient();
@@ -73,6 +75,13 @@ namespace GetAllLinks.Droid.Services.Implementations
 					return await streamReader.ReadToEndAsync();
 				}
 			}
+		}
+
+		public Task<string> GetDefaultDownloadDir()
+		{
+			var activity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
+			var mediaDirs = activity.GetExternalMediaDirs(); // creates the dirs if not already present
+			return Task.FromResult(mediaDirs.Last().AbsolutePath);
 		}
 
 		private void GetPermission(string requestedPermission)

@@ -1,6 +1,7 @@
 using System;
 using Android.App;
 using Android.OS;
+using GetAllLinks.Core.Infrastructure.Interfaces;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Droid.Shared.Presenter;
 using MvvmCross.Droid.Shared.Attributes;
@@ -9,7 +10,8 @@ using MvvmCross.Droid.Support.V4;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Shared.Caching;
 using GetAllLinks.Core.ViewModels;
-using GetAllLinks.Droid;
+using MvvmCross.Core.Views;
+using MvvmCross.Platform;
 
 namespace GetAllLinks.Droid
 {
@@ -50,15 +52,15 @@ namespace GetAllLinks.Droid
 
 		public override void OnBackPressed()
 		{
-			//(currentViewModel as ICloseable)?.OnClose();
+			(currentViewModel as ICloseable)?.OnClose();
 
-			//if (currentViewModel?.GetType() == typeof(AddEditViewModel))
-			//{
-			//	var viewDispatcher = Mvx.Resolve<IMvxViewDispatcher>();
-			//	var request = MvxViewModelRequest.GetDefaultRequest(typeof(LastSeenViewModel));
-			//	viewDispatcher.ShowViewModel(request);
-			//	return;
-			//}
+			if (currentViewModel?.GetType() == typeof(SettingsViewModel))
+			{
+				var viewDispatcher = Mvx.Resolve<IMvxViewDispatcher>();
+				var request = MvxViewModelRequest.GetDefaultRequest(typeof(GetAllLinksViewModel));
+				viewDispatcher.ShowViewModel(request);
+				return;
+			}
 
 			base.OnBackPressed();
 		}

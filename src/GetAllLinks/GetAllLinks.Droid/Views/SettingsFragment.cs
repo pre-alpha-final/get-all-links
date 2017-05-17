@@ -5,8 +5,8 @@ using Android.Views;
 
 namespace GetAllLinks.Droid.Views
 {
-	[MvxFragment(typeof(MainActivityViewModel), Resource.Layout.getAllLinksView, ViewModelType = typeof(GetAllLinksViewModel), IsCacheableFragment = false)]
-	public class GetAllLinksFragment : BaseFragment<GetAllLinksViewModel>
+	[MvxFragment(typeof(MainActivityViewModel), Resource.Layout.settingsView, ViewModelType = typeof(SettingsViewModel), IsCacheableFragment = false)]
+	public class SettingsFragment : BaseFragment<SettingsViewModel>
 	{
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{

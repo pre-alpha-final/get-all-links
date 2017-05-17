@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GetAllLinks.Core.Helpers;
@@ -22,7 +21,7 @@ namespace GetAllLinks.Core.Infrastructure.Services.Implementations
 
 		public async Task<List<DownloadItemPO>> GetDownloadItems()
 		{
-			var html = await _downloader.DownloadList("");
+			var html = await _downloader.DownloadList(Settings.ListUrl);
 			var htmlLinks = LinkFinderHelper.FindLinks(html).Where(e => e.Href != null).ToList();
 
 			_downloadableItems = htmlLinks.Select(e => new DownloadItemPO
@@ -35,16 +34,16 @@ namespace GetAllLinks.Core.Infrastructure.Services.Implementations
 
 		public Task DownloadAll()
 		{
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < Settings.SimultaneousDownloads; i++)
 			{
-				Task.Run(() =>
+				Task.Run(async () =>
 				{
 					while (true)
 					{
 						var downloadable = GetNextDownloadable();
 						if (downloadable == null)
 							return;
-						Mvx.Resolve<IDownloader>().Download(downloadable);
+						await Mvx.Resolve<IDownloader>().Download(downloadable);
 					}
 				});
 			}

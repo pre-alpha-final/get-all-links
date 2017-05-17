@@ -24,10 +24,17 @@ namespace GetAllLinks.Core.ViewModels
 		{
 			_downloadManager = downloadManager;
 			SettingsCommand = new MvxCommand(SettingsAction);
+			GoCommand = new MvxCommand(GoAction);
 		}
 
 		public IMvxCommand SettingsCommand { get; }
-		private async void SettingsAction()
+		private void SettingsAction()
+		{
+			ShowViewModel<SettingsViewModel>();
+		}
+
+		public IMvxCommand GoCommand { get; }
+		private async void GoAction()
 		{
 			DownloadableItems = await _downloadManager.GetDownloadItems();
 			await _downloadManager.DownloadAll();

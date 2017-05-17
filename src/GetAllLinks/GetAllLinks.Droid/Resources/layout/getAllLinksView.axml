@@ -5,11 +5,11 @@
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:padding="15sp"
 	android:background="#000000">
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:gravity="right"
 		android:orientation="vertical">
 		<FillWidthImageButton
 			android:id="@+id/settings"
@@ -17,14 +17,27 @@
 			android:layout_height="wrap_content"
 			android:layout_marginTop="10dp"
 			android:layout_marginRight="10dp"
+			android:layout_gravity="right"
 			android:text="Settings"
 			local:standard_drawable="@drawable/off"
 			local:clicked_drawable="@drawable/on"
 			local:MvxBind="Click SettingsCommand"/>
+		<FillWidthImageButton
+			android:id="@+id/go"
+			android:layout_width="200dp"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="10dp"
+			android:layout_marginRight="10dp"
+			android:layout_gravity="center"
+			android:text="GO"
+			local:standard_drawable="@drawable/off"
+			local:clicked_drawable="@drawable/on"
+			local:MvxBind="Click GoCommand"/>
 		<MvvmCross.Droid.Support.V7.RecyclerView.MvxRecyclerView
 			android:id="@+id/downloads_recycler"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:layout_marginTop="15sp"
 			local:MvxItemTemplate="@layout/download_item"
 			local:MvxBind="ItemsSource DownloadableItems" />
 	</LinearLayout>
