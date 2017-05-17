@@ -48,7 +48,7 @@ namespace GetAllLinks.Core.Infrastructure.POs
 			}
 		}
 
-		public void UpdateProgress(double completion, int speed)
+		public void UpdateProgress(double completion, int speed, string status = "")
 		{
 			Completion = $"{100 * completion:0.00} %";
 			var speedKbytesSecond = (double)speed * 1000 / 1024;
@@ -56,6 +56,8 @@ namespace GetAllLinks.Core.Infrastructure.POs
 			DownloadSpeed = $"{speedKbytesSecond:0.00} Kb/s";
 			if (speedMbytesSecond > 1)
 				DownloadSpeed = $"{speedMbytesSecond:0.00} Mb/s";
+			if (string.IsNullOrWhiteSpace(status) == false)
+				Completion = status;
 		}
 	}
 }

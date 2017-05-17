@@ -33,7 +33,14 @@ namespace GetAllLinks.Droid.Services.Implementations
 			var client = new WebClient();
 			using (var netStream = await client.OpenReadTaskAsync(downloadable.Url))
 			{
-				using (var fileStream = File.Create($"{targetDirectory}/{downloadable.Name}"))
+				var fileName = $"{targetDirectory}/{downloadable.Name}";
+				if (File.Exists(fileName))
+				{
+					downloadable.UpdateProgress(0, 0, "error: file exists");
+					return;
+				}
+
+				using (var fileStream = File.Create(fileName))
 				{
 					var buffer = new byte[ChunkSize];
 					var totalBytes = int.Parse(client.ResponseHeaders[HttpResponseHeader.ContentLength]);
