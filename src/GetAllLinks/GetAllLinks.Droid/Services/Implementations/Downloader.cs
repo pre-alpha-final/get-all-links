@@ -63,6 +63,18 @@ namespace GetAllLinks.Droid.Services.Implementations
 			}
 		}
 
+		public async Task<string> DownloadList(string url)
+		{
+			var client = new WebClient();
+			using (var netStream = await client.OpenReadTaskAsync(url))
+			{
+				using (var streamReader = new StreamReader(netStream))
+				{
+					return await streamReader.ReadToEndAsync();
+				}
+			}
+		}
+
 		private void GetPermission(string requestedPermission)
 		{
 			var activity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;

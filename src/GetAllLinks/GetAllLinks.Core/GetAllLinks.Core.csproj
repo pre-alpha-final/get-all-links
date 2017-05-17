@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Helpers\LinkFinderHelper.cs" />
     <Compile Include="Infrastructure\POs\DownloadItemPO.cs" />
     <Compile Include="Infrastructure\POs\IDownloadable.cs" />
     <Compile Include="Infrastructure\Services\IDownloader.cs" />
