@@ -22,14 +22,16 @@ namespace GetAllLinks.Droid.Services.Implementations
 		{
 			GetPermission(Manifest.Permission.ReadExternalStorage);
 			GetPermission(Manifest.Permission.WriteExternalStorage);
-			var moviesDirectory = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryMovies).AbsolutePath;
+
+			var activity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
+			var mediaDirs = activity.GetExternalMediaDirs();
+			var targetDirectory = "/storage/697B-091B/Android/media/com.getalllinks";
 
 			var receivedBytes = 0;
 			var client = new WebClient();
-
 			using (var netStream = await client.OpenReadTaskAsync(downloadable.Url))
 			{
-				using (var fileStream = File.Create($"{moviesDirectory}/{downloadable.Name}"))
+				using (var fileStream = File.Create($"{targetDirectory}/{downloadable.Name}"))
 				{
 					var buffer = new byte[ChunkSize];
 					var totalBytes = int.Parse(client.ResponseHeaders[HttpResponseHeader.ContentLength]);
