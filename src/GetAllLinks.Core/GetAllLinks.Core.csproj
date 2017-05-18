@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Helpers\CircularBuffer.cs" />
     <Compile Include="Helpers\LinkFinderHelper.cs" />
     <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Infrastructure\Interfaces\IClosable.cs" />

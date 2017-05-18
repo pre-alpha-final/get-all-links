@@ -18,7 +18,10 @@ namespace GetAllLinks.Droid.Services.Implementations
 	class Downloader : IDownloader
 	{
 		private const int ChunkSize = 4096;
-		private const int MeasureSpan = 4000;
+		private const int MeasureSpan = 500;
+		private const int MeasureCount = 10;
+		private CircularBuffer _sentData;
+
 
 		public async Task Download(IDownloadable downloadable)
 		{
@@ -55,6 +58,7 @@ namespace GetAllLinks.Droid.Services.Implementations
 					var speed = 0;
 					var lastUpdate = DateTime.Now;
 					var lastReceivedBytes = 0;
+					_sentData = new CircularBuffer(MeasureCount);
 					for (;;)
 					{
 						var bytesRead = await netStream.ReadAsync(buffer, 0, buffer.Length);
@@ -68,7 +72,8 @@ namespace GetAllLinks.Droid.Services.Implementations
 
 						if (DateTime.Now > lastUpdate + TimeSpan.FromMilliseconds(MeasureSpan))
 						{
-							speed = (receivedBytes - lastReceivedBytes) / MeasureSpan;
+							_sentData.Add(receivedBytes - lastReceivedBytes);
+							speed = _sentData.GetAverage() / MeasureSpan;
 							downloadable.UpdateProgress((double)receivedBytes / totalBytes, speed);
 							lastUpdate = DateTime.Now;
 							lastReceivedBytes = receivedBytes;
