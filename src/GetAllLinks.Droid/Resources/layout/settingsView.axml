@@ -25,6 +25,7 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="25sp"
 		android:textSize="20sp"
+		android:inputType="number"
 		android:text="Simultaneous downloads" />
 	<EditText
 		android:layout_width="match_parent"
