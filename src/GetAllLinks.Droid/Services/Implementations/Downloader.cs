@@ -29,6 +29,13 @@ namespace GetAllLinks.Droid.Services.Implementations
 			activity.GetExternalMediaDirs();
 			var targetDirectory = Settings.DestinationDirectory;
 
+			if (Uri.IsWellFormedUriString(downloadable.Url, UriKind.RelativeOrAbsolute) == false ||
+				downloadable.Url.StartsWith("&"))
+			{
+				downloadable.UpdateProgress(0, 0, "error: incorrect url");
+				return;
+			}
+
 			var receivedBytes = 0;
 			var client = new WebClient();
 			using (var netStream = await client.OpenReadTaskAsync(downloadable.Url))
