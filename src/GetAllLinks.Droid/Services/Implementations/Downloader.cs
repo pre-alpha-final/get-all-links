@@ -33,8 +33,7 @@ namespace GetAllLinks.Droid.Services.Implementations
 			activity.GetExternalMediaDirs();
 			var targetDirectory = Settings.DestinationDirectory;
 
-			if (Uri.IsWellFormedUriString(downloadable.Url, UriKind.RelativeOrAbsolute) == false ||
-				downloadable.Url.StartsWith("&"))
+			if (downloadable.Url.StartsWith("&"))
 			{
 				downloadable.UpdateProgress(0, 0, "error: incorrect url");
 				return;

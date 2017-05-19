@@ -34,6 +34,7 @@ namespace GetAllLinks.Core.Infrastructure.Services.Implementations
 
 		public Task DownloadAll()
 		{
+			_index = 0;
 			for (int i = 0; i < Settings.SimultaneousDownloads; i++)
 			{
 				Task.Run(async () =>
