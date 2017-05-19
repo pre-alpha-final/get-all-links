@@ -1,0 +1,2 @@
+﻿# Restore old gc
+MONO_GC_PARAMS=bridge-implementation=old

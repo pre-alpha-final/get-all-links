@@ -197,6 +197,7 @@
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <AndroidEnvironment Include="Resources\values\env" />
     <Compile Include="Services\Implementations\Downloader.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="SplashActivity.cs" />
