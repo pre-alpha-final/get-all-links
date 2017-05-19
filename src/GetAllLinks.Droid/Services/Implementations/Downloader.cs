@@ -68,7 +68,7 @@ namespace GetAllLinks.Droid.Services.Implementations
 							break;
 						}
 						receivedBytes += bytesRead;
-						await fileStream.WriteAsync(buffer, 0, buffer.Length);
+						await fileStream.WriteAsync(buffer, 0, bytesRead);
 
 						if (DateTime.Now > lastUpdate + TimeSpan.FromMilliseconds(MeasureSpan))
 						{
