@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -19,7 +20,7 @@ namespace GetAllLinks.Droid.Services.Implementations
 	{
 		private const int ChunkSize = 4096;
 		private const int MeasureSpan = 500;
-		private const int MeasureCount = 10;
+		private const int MeasureCount = 5;
 		private CircularBuffer _sentData;
 
 
@@ -57,6 +58,8 @@ namespace GetAllLinks.Droid.Services.Implementations
 
 					var speed = 0;
 					var lastUpdate = DateTime.Now;
+					var stopWatch = new Stopwatch();
+					stopWatch.Start();
 					var lastReceivedBytes = 0;
 					_sentData = new CircularBuffer(MeasureCount);
 					for (;;)
@@ -73,7 +76,8 @@ namespace GetAllLinks.Droid.Services.Implementations
 						if (DateTime.Now > lastUpdate + TimeSpan.FromMilliseconds(MeasureSpan))
 						{
 							_sentData.Add(receivedBytes - lastReceivedBytes);
-							speed = _sentData.GetAverage() / MeasureSpan;
+							speed = _sentData.GetAverage() / (int)stopWatch.Elapsed.TotalMilliseconds;
+							stopWatch.Restart();
 							downloadable.UpdateProgress((double)receivedBytes / totalBytes, speed);
 							lastUpdate = DateTime.Now;
 							lastReceivedBytes = receivedBytes;
