@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Android;
 using Android.Content.PM;
@@ -13,6 +12,11 @@ using GetAllLinks.Core.Infrastructure.Services;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Droid.Platform;
 using GetAllLinks.Core.Helpers;
+using ModernHttpClient;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Java.IO;
+using File = System.IO.File;
 
 namespace GetAllLinks.Droid.Services.Implementations
 {
@@ -33,27 +37,34 @@ namespace GetAllLinks.Droid.Services.Implementations
 			activity.GetExternalMediaDirs();
 			var targetDirectory = Settings.DestinationDirectory;
 
-			if (downloadable.Url.StartsWith("&"))
+			var fileName = $"{targetDirectory}/{downloadable.Name}";
+			var fileSize = 0L;
+			if (File.Exists(fileName))
 			{
-				downloadable.UpdateProgress(0, 0, "error: incorrect url");
+				var fileInfo = new FileInfo(fileName);
+				fileSize = fileInfo.Length;
+			}
+
+			var client = new HttpClient(new NativeMessageHandler());
+			var request = new HttpRequestMessage(HttpMethod.Get, downloadable.Url);
+			if (fileSize > 0)
+				request.Headers.Range = new RangeHeaderValue(fileSize, null);
+			var response = await client.SendAsync(
+				request,
+				HttpCompletionOption.ResponseHeadersRead);
+			if (response.IsSuccessStatusCode == false)
+			{
+				downloadable.UpdateProgress(0, 0, "error: download error");
 				return;
 			}
 
-			var receivedBytes = 0;
-			var client = new WebClient();
-			using (var netStream = await client.OpenReadTaskAsync(downloadable.Url))
+			var receivedBytes = (int) fileSize;
+			using (var netStream = await response.Content.ReadAsStreamAsync())
 			{
-				var fileName = $"{targetDirectory}/{downloadable.Name}";
-				if (File.Exists(fileName))
-				{
-					downloadable.UpdateProgress(0, 0, "error: file exists");
-					return;
-				}
-
-				using (var fileStream = File.Create(fileName))
+				using (var fileStream = new FileOutputStream(fileName, true))
 				{
 					var buffer = new byte[ChunkSize];
-					var totalBytes = int.Parse(client.ResponseHeaders[HttpResponseHeader.ContentLength]);
+					var totalBytes = response.Content.Headers.ContentLength ?? -1;
 
 					var speed = 0;
 					var lastUpdate = DateTime.Now;
@@ -89,8 +100,8 @@ namespace GetAllLinks.Droid.Services.Implementations
 
 		public async Task<string> DownloadList(string url)
 		{
-			var client = new WebClient();
-			using (var netStream = await client.OpenReadTaskAsync(url))
+			var client = new HttpClient(new NativeMessageHandler());
+			using (var netStream = await client.GetStreamAsync(url))
 			{
 				using (var streamReader = new StreamReader(netStream))
 				{

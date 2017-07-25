@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Chance.MvvmCross.Plugins.UserInteraction;
 using GetAllLinks.Core.Helpers;
 using GetAllLinks.Core.Infrastructure.POs;
 using MvvmCross.Platform;
@@ -21,14 +23,22 @@ namespace GetAllLinks.Core.Infrastructure.Services.Implementations
 
 		public async Task<List<DownloadItemPO>> GetDownloadItems()
 		{
-			var html = await _downloader.DownloadList(Settings.ListUrl);
-			var htmlLinks = LinkFinderHelper.FindLinks(html).Where(e => e.Href != null).ToList();
-
-			_downloadableItems = htmlLinks.Select(e => new DownloadItemPO
+			_downloadableItems = new List<DownloadItemPO>();
+			try
 			{
-				Name = e.Text,
-				Url = e.Href,
-			}).ToList();
+				var html = await _downloader.DownloadList(Settings.ListUrl);
+				var htmlLinks = LinkFinderHelper.FindLinks(html).Where(e => e.Href != null).ToList();
+
+				_downloadableItems = htmlLinks.Select(e => new DownloadItemPO
+				{
+					Name = e.Text,
+					Url = e.Href,
+				}).ToList();
+			}
+			catch (Exception e)
+			{
+				await Mvx.Resolve<IUserInteraction>().AlertAsync(e.Message);
+			}
 			return _downloadableItems;
 		}
 
