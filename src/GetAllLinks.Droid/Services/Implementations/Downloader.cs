@@ -54,7 +54,7 @@ namespace GetAllLinks.Droid.Services.Implementations
 				HttpCompletionOption.ResponseHeadersRead);
 			if (response.IsSuccessStatusCode == false)
 			{
-				downloadable.UpdateProgress(0, 0, "error: download error");
+				downloadable.UpdateProgress(0, 0, $"error: {response.ReasonPhrase}");
 				return;
 			}
 
