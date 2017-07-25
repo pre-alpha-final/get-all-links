@@ -64,7 +64,7 @@ namespace GetAllLinks.Droid.Services.Implementations
 				using (var fileStream = new FileOutputStream(fileName, true))
 				{
 					var buffer = new byte[ChunkSize];
-					var totalBytes = response.Content.Headers.ContentLength ?? -1;
+					var totalBytes = (response.Content.Headers.ContentLength ?? -1) + fileSize;
 
 					var speed = 0;
 					var lastUpdate = DateTime.Now;
