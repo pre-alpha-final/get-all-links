@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Android.App;
 using Android.OS;
 using GetAllLinks.Core.Infrastructure.Interfaces;
@@ -10,6 +11,7 @@ using MvvmCross.Droid.Support.V4;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Shared.Caching;
 using GetAllLinks.Core.ViewModels;
+using GetAllLinks.Droid.Helpers;
 using MvvmCross.Core.Views;
 using MvvmCross.Platform;
 
@@ -48,6 +50,16 @@ namespace GetAllLinks.Droid
 		{
 			base.OnCreate(savedInstanceState);
 			SetContentView(Resource.Layout.mainView);
+
+			AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+			{
+				Task.Run(async () => await GeneralException.HandleGeneralException(s, e));
+			};
+
+			TaskScheduler.UnobservedTaskException += (s, e) =>
+			{
+				Task.Run(async () => await GeneralException.HandleGeneralException(s, e));
+			};
 		}
 
 		public override void OnBackPressed()

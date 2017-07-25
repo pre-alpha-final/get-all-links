@@ -207,6 +207,8 @@
     <Compile Include="Controls\FillWidthImageButton.cs" />
     <Compile Include="Controls\FillWidthMvxImageView.cs" />
     <Compile Include="Controls\FillWidthUrlImageButton.cs" />
+    <Compile Include="Helpers\GeneralException.cs" />
+    <Compile Include="Helpers\Settings.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
