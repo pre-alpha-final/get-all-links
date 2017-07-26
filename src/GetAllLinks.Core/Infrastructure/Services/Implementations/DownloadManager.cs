@@ -16,14 +16,19 @@ namespace GetAllLinks.Core.Infrastructure.Services.Implementations
 		private static readonly object ItemAcquisitionLock = new object();
 		private int _index;
 
+		public int CurrentItemCount { get; set; }
+
 		public DownloadManager(IDownloader downloader)
 		{
 			_downloader = downloader;
+			_downloadableItems = new List<DownloadItemPO>();
 		}
 
 		public async Task<List<DownloadItemPO>> GetDownloadItems()
 		{
-			_downloadableItems = new List<DownloadItemPO>();
+			if (_downloadableItems.Count > 0)
+				return _downloadableItems;
+				
 			try
 			{
 				var html = await _downloader.DownloadList(Settings.ListUrl);
@@ -34,6 +39,7 @@ namespace GetAllLinks.Core.Infrastructure.Services.Implementations
 					Name = e.Text,
 					Url = e.Href,
 				}).ToList();
+				CurrentItemCount = _downloadableItems.Count;
 			}
 			catch (Exception e)
 			{

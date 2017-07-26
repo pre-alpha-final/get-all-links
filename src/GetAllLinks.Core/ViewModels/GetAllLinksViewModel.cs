@@ -25,6 +25,15 @@ namespace GetAllLinks.Core.ViewModels
 			_downloadManager = downloadManager;
 			SettingsCommand = new MvxCommand(SettingsAction);
 			GoCommand = new MvxCommand(GoAction);
+			DownloadableItems = new List<DownloadItemPO>();
+		}
+
+		public override async void Start()
+		{
+			base.Start();
+
+			if (_downloadManager.CurrentItemCount > 0)
+				DownloadableItems = await _downloadManager.GetDownloadItems();
 		}
 
 		public IMvxCommand SettingsCommand { get; }
@@ -36,7 +45,8 @@ namespace GetAllLinks.Core.ViewModels
 		public IMvxCommand GoCommand { get; }
 		private async void GoAction()
 		{
-			DownloadableItems = await _downloadManager.GetDownloadItems();
+			if (DownloadableItems.Count <= 0)
+				DownloadableItems = await _downloadManager.GetDownloadItems();
 			await _downloadManager.DownloadAll();
 		}
 	}
