@@ -64,10 +64,13 @@ namespace GetAllLinks.Core.Infrastructure.Services.Implementations
 						{
 							await Mvx.Resolve<IDownloader>().Download(downloadable);
 						}
-						catch
+						catch (Exception e)
 						{
-							// ignored
 							downloadable.UpdateProgress(0, 0, "error: download error");
+						}
+						finally
+						{
+							downloadable.InProgress = false;
 						}
 					}
 				});
@@ -79,10 +82,18 @@ namespace GetAllLinks.Core.Infrastructure.Services.Implementations
 		{
 			lock (ItemAcquisitionLock)
 			{
-				if (_index >= _downloadableItems.Count)
-					return null;
+				while (true)
+				{
+					if (_index >= _downloadableItems.Count)
+						return null;
 
-				return _downloadableItems[_index++];
+					var item = _downloadableItems[_index++];
+					if (item.InProgress)
+						continue;
+					item.InProgress = true;
+
+					return item;
+				}
 			}
 		}
 	}

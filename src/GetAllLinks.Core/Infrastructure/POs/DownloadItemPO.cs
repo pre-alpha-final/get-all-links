@@ -15,6 +15,17 @@ namespace GetAllLinks.Core.Infrastructure.POs
 			}
 		}
 
+		private bool _inProgress;
+		public bool InProgress
+		{
+			get { return _inProgress; }
+			set
+			{
+				_inProgress = value;
+				RaisePropertyChanged();
+			}
+		}
+
 		private string _url;
 		public string Url
 		{
